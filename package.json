@@ -1,6 +1,6 @@
 {
   "name": "cordova-testabit",
-  "version": "3.4.0-0.1.4-dev",
+  "version": "3.4.0-0.1.5-dev",
   "preferGlobal": "true",
   "description": "Cordova testabit command line interface tool",
   "main": "cordova",
