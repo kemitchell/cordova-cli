@@ -49,7 +49,9 @@ module.exports = function CLI(inputArgs) {
         .boolean('version')
         .boolean('silent')
         .string('copy-from')
+        .string('content-url')
         .alias('copy-from', 'src')
+        .alias('content-url', 'url')
         .string('link-to')
         .string('searchpath')
         .argv;
@@ -133,6 +135,7 @@ module.exports = function CLI(inputArgs) {
         if (args._[4]) {
             cfg = JSON.parse(args._[4]);
         }
+
         var customWww = args['copy-from'] || args['link-to'];
         if (customWww) {
             if (customWww.indexOf(':') != -1) {
@@ -149,8 +152,9 @@ module.exports = function CLI(inputArgs) {
             cfg.lib = cfg.lib || {};
             cfg.lib.www = wwwCfg;
         }
-        // create(dir, id, name, cfg)
-        cordova.raw[cmd].call(this, args._[1], args._[2], args._[3], cfg).done();
+
+        // create(dir, id, name, url, cfg)
+        cordova.raw[cmd].call(this, args._[1], args._[2], args._[3], args['content-url'], cfg).done();
     } else {
         // platform/plugins add/rm [target(s)]
         var subcommand = tokens[0]; // this has the sub-command, like "add", "ls", "rm" etc.

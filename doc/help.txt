@@ -10,6 +10,7 @@ Global Commands
                                                CONFIG is a json string whose key/values will be included
                                                in [PATH]/.cordova/config.json
                   [--copy-from|src=<PATH>] ... use custom www assets instead of the stock Cordova hello-world.
+                  [--content-url|url=<url>]... application access point url
                   [--link-to=<PATH>] ......... symlink to custom www assets without creating a copy.
 
     help ..................................... shows this syntax summary

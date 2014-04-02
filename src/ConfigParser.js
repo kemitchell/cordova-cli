@@ -56,6 +56,9 @@ ConfigParser.prototype = {
     setPackageName: function(id) {
         this.doc.getroot().attrib['id'] = id;
     },
+    setContentUrl : function(url){
+        this.doc.find('content').attrib['src'] = url;
+    },
     name: function() {
         return getNodeTextSafe(this.doc.find('name'));
     },

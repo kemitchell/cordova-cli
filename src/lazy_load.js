@@ -42,6 +42,15 @@ module.exports = {
         return module.exports.custom(url, 'cordova', platform, platforms[platform].version);
     },
     // Returns a promise for the path to the lazy-loaded directory.
+    testabit:function lazy_load(platform) {
+        if (!(platform in platforms)) {
+            return Q.reject(new Error('Testabit library "' + platform + '" not recognized.'));
+        }
+
+        var url = platforms[platform].url + ';a=snapshot;h=' + platforms[platform].version + ';sf=tgz';
+        return module.exports.custom(url, 'cordova', platform, platforms[platform].version);
+    },
+    // Returns a promise for the path to the lazy-loaded directory.
     custom:function(url, id, platform, version) {
         var download_dir;
         var tmp_dir;

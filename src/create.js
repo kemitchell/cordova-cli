@@ -31,7 +31,8 @@ var path          = require('path'),
     util          = require('./util');
 
 var DEFAULT_NAME = "HelloCordova",
-    DEFAULT_ID   = "io.cordova.hellocordova";
+    DEFAULT_ID   = "io.cordova.hellocordova",
+    DEFAULT_URL   = "http://sandbox.testabit.com";
 
 /**
  * Usage:
@@ -41,7 +42,7 @@ var DEFAULT_NAME = "HelloCordova",
  * @cfg - extra config to be saved in .cordova/config.json
  **/
 // Returns a promise.
-module.exports = function create (dir, id, name, cfg) {
+module.exports = function create (dir, id, name, url, cfg) {
     if (!dir ) {
         return Q(help());
     }
@@ -53,6 +54,7 @@ module.exports = function create (dir, id, name, cfg) {
     cfg = cfg || {};
     id = id || cfg.id || DEFAULT_ID;
     name = name || cfg.name || DEFAULT_NAME;
+    url = url || cfg.url || DEFAULT_URL;
 
     // Make absolute.
     dir = path.resolve(dir);
@@ -155,18 +157,21 @@ module.exports = function create (dir, id, name, cfg) {
         shell.mkdir(path.join(dir, 'hooks'));
 
         // Add hooks README.md
-        shell.cp(path.join(__dirname, '..', 'templates', 'hooks-README.md'), path.join(dir, 'hooks', 'README.md'));
+        shell.cp('-r', path.join(__dirname, '..', 'templates', 'hooks'), dir);
+        shell.chmod('+x', path.join(dir, 'hooks', 'after_platform_add', 'install_plugins.js'));
 
         var configPath = util.projectConfig(dir);
         // Add template config.xml for apps that are missing it
         if (!fs.existsSync(configPath)) {
             var template_config_xml = path.join(__dirname, '..', 'templates', 'config.xml');
             shell.cp(template_config_xml, configPath);
-            // Write out id and name to config.xml
-            var config = new ConfigParser(configPath);
-            config.setPackageName(id);
-            config.setName(name);
-            config.write();
         }
+        
+        // Write out id and name to config.xml in any case
+        var config = new ConfigParser(configPath);
+        config.setPackageName(id);
+        config.setContentUrl(url);
+        config.setName(name);
+        config.write();
     });
 };
